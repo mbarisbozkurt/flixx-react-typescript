@@ -1,3 +1,5 @@
+//***API INFO starts***/
+
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 if (!API_KEY) {
   throw new Error('TMDB API key is not defined in environment variables');
@@ -25,6 +27,24 @@ export const TMDB = {
   }
 };
 
+//***API INFO ends***/
+
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  overview: string;
+  release_date: string;
+}
+
+interface MovieResponse {
+  results: Movie[];
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
+
 export const fetchFromTMDB = async (endpoint: string) => {
   try {
     const response = await fetch(
@@ -40,4 +60,28 @@ export const fetchFromTMDB = async (endpoint: string) => {
     console.error('Error fetching data:', error);
     throw error;
   }
-}; 
+};
+
+export const fetchNowPlayingMovies = async (): Promise<MovieResponse> => {
+  const url = `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`;
+  console.log('Fetching movies from:', url);
+  
+  try {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('API Error:', { status: response.status, data: errorData });
+      throw new Error(`API Error: ${response.status} - ${errorData.status_message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('API Response:', data);
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+};
+
+export type { Movie, MovieResponse }; 

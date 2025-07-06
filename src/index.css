@@ -1,36 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #020d18;
-  color: white;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-}
-
-@layer base {
-  body {
-    @apply bg-primary text-white font-['Poppins'];
-  }
-}
-
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-primary text-white;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@layer base {
+  body {
+    @apply bg-primary text-white font-roboto;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat font-bold;
+  }
+
+  /* Section titles (like "NOW PLAYING") */
+  h2 {
+    @apply text-2xl uppercase tracking-wide;
+  }
+
+  /* Movie titles */
+  .movie-title {
+    @apply font-roboto text-[16px] font-medium;
+  }
+
+  /* Ratings */
+  .rating {
+    @apply font-roboto text-[14px] font-medium;
+  }
 }
 
 a {
@@ -77,9 +92,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
 }
