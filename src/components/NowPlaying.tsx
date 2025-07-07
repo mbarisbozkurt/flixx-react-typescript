@@ -18,13 +18,11 @@ const NowPlaying = () => {
     queryFn: fetchNowPlayingMovies
   });
 
-  // console.log('NowPlaying state:', { data, isLoading, isError, error });
-
   if (isLoading) {
     return (
-      <section className="now-playing-section py-12">
+      <section id="nowPlaying" className="now-playing-section py-8 md:py-12">
         <div className="now-playing-content container mx-auto px-4">
-          <h2 className="text-center mb-8">
+          <h2 className="text-xl md:text-2xl text-center mb-6 md:mb-8">
             NOW PLAYING
           </h2>
           <div className="flex justify-center">
@@ -37,9 +35,9 @@ const NowPlaying = () => {
 
   if (isError) {
     return (
-      <section className="now-playing-section py-12">
+      <section id="nowPlaying" className="now-playing-section py-8 md:py-12">
         <div className="now-playing-content container mx-auto px-4">
-          <h2 className="text-center mb-8">
+          <h2 className="text-xl md:text-2xl text-center mb-6 md:mb-8">
             NOW PLAYING
           </h2>
           <div className="text-center text-red-500">
@@ -53,9 +51,9 @@ const NowPlaying = () => {
 
   if (!data?.results?.length) {
     return (
-      <section className="now-playing-section py-12">
+      <section id="nowPlaying" className="now-playing-section py-8 md:py-12">
         <div className="now-playing-content container mx-auto px-4">
-          <h2 className="text-center mb-8">
+          <h2 className="text-xl md:text-2xl text-center mb-6 md:mb-8">
             NOW PLAYING
           </h2>
           <div className="text-center text-yellow-500">
@@ -67,9 +65,9 @@ const NowPlaying = () => {
   }
 
   return (
-    <section className="now-playing-section py-12">
+    <section id="nowPlaying" className="now-playing-section py-8 md:py-12">
       <div className="now-playing-content container mx-auto px-4">
-        <h2 className="text-center mb-8">
+        <h2 className="text-xl md:text-2xl text-center mb-6 md:mb-8">
           NOW PLAYING
         </h2>
         
@@ -88,11 +86,19 @@ const NowPlaying = () => {
               slidesPerView: 1,
               spaceBetween: 20
             },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20
+            },
             768: {
               slidesPerView: 2,
               spaceBetween: 30
             },
             1024: {
+              slidesPerView: 3,
+              spaceBetween: 30
+            },
+            1280: {
               slidesPerView: 4,
               spaceBetween: 30
             }
@@ -100,13 +106,13 @@ const NowPlaying = () => {
         >
           {data?.results.map((movie: Movie) => (
             <SwiperSlide key={movie.id}>
-              <div className="bg-gray-800 rounded-lg overflow-hidden">
+              <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
                   className="w-full h-auto aspect-[2/3] object-cover"
                 />
-                <div className="p-4">
+                <div className="p-3 md:p-4">
                   <p className="movie-title truncate">{movie.title}</p>
                   <div className="flex items-center mt-2">
                     <span className="text-yellow-500">★</span>
