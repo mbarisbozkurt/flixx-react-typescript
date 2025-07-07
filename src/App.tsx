@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Movies from './pages/Movies';
 import TvShows from './pages/TvShows';
 import Navbar from './components/Navbar';
 
@@ -11,7 +10,6 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />} />
           <Route path="/tv-shows" element={<TvShows />} />
           {/* Add more routes as you create the components */}
         </Routes>
