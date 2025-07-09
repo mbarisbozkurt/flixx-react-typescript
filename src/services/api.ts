@@ -1,4 +1,6 @@
-//***API INFO starts***/
+import { Movie, MovieDetails, TVShowDetails, TVShow, SearchResponse } from '../types/tmdb';
+
+//*** API INFO starts ***/
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 if (!API_KEY) {
@@ -27,61 +29,49 @@ export const TMDB = {
   }
 };
 
-//***API INFO ends***/
+//*** API INFO ends ***/
 
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average: number;
-  overview: string;
-  release_date: string;
-}
+export type MovieResponse = SearchResponse<Movie>;
+export type TVShowResponse = SearchResponse<TVShow>;
 
-interface MovieResponse {
-  results: Movie[];
-  page: number;
-  total_pages: number;
-  total_results: number;
-}
+export const fetchFromTMDB = async (endpoint: string, params = {}) => {
+  const url = new URL(`${BASE_URL}${endpoint}`);
+  url.searchParams.append('api_key', API_KEY);
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.append(key, String(value));
+  });
 
-export const fetchFromTMDB = async (endpoint: string) => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`
-    );
-    
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+  const response = await fetch(url.toString());
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
+  return response.json();
 };
 
 export const fetchNowPlayingMovies = async (): Promise<MovieResponse> => {
-  const url = `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`;
-  console.log('Fetching movies from:', url);
-  
-  try {
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('API Error:', { status: response.status, data: errorData });
-      throw new Error(`API Error: ${response.status} - ${errorData.status_message || response.statusText}`);
-    }
-
-    const data = await response.json();
-    console.log('API Response:', data);
-    return data;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    throw error;
-  }
+  return fetchFromTMDB(TMDB.endpoints.nowPlaying);
 };
 
-export type { Movie, MovieResponse }; 
+export const fetchPopularMovies = async (): Promise<MovieResponse> => {
+  const data = await fetchFromTMDB(TMDB.endpoints.popularMovies);
+  return {
+    ...data,
+    results: data.results.slice(0, 20) // Ensure we only get 20 movies (4x5 grid)
+  };
+};
+
+export const fetchPopularTVShows = async (): Promise<TVShowResponse> => {
+  const data = await fetchFromTMDB(TMDB.endpoints.popularTVShows);
+  return {
+    ...data,
+    results: data.results.slice(0, 20) // Ensure we only get 20 TV shows (4x5 grid)
+  };
+};
+
+export const fetchMovieDetails = async (id: string): Promise<MovieDetails> => {
+  return fetchFromTMDB(TMDB.endpoints.movieDetails(id));
+};
+
+export const fetchTVShowDetails = async (id: string): Promise<TVShowDetails> => {
+  return fetchFromTMDB(TMDB.endpoints.tvDetails(id));
+}; 

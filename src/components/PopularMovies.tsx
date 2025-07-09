@@ -1,29 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { TMDB, fetchFromTMDB, type MovieResponse } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { TMDB, fetchPopularMovies, type MovieResponse } from '../services/api';
+import LoadingSpinner from './LoadingSpinner';
 
 const PopularMovies = () => {
+  const navigate = useNavigate();
   const { data, isLoading, error } = useQuery<MovieResponse>({
     queryKey: ['popularMovies'],
-    queryFn: async () => {
-      const data = await fetchFromTMDB(TMDB.endpoints.popularMovies);
-      return {
-        ...data,
-        results: data.results.slice(0, 20) // Ensure we only get 20 movies (5x4 grid)
-      };
-    }
+    queryFn: fetchPopularMovies
   });
 
   if (isLoading) {
-    return (
-      <section className="w-full bg-[#020d18] py-6 md:py-8 mt-6 md:mt-8">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-xl md:text-2xl text-white font-bold mb-6 md:mb-8 text-center tracking-wide">POPULAR MOVIES</h2>
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
-          </div>
-        </div>
-      </section>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -46,6 +34,7 @@ const PopularMovies = () => {
             <div 
               key={movie.id} 
               className="relative group cursor-pointer overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105"
+              onClick={() => navigate(`/movie/${movie.id}`)}
             >
               {/* Dark Overlay */}
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300" />
@@ -60,6 +49,11 @@ const PopularMovies = () => {
                 />
               </div>
               
+              {/* Rating Badge */}
+              <div className="absolute top-2 right-2 bg-yellow-500 text-black px-2 py-1 rounded text-sm font-bold">
+                {Math.round(movie.vote_average * 10) / 10}
+              </div>
+
               {/* Movie Info */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2 sm:p-3 md:p-4 pt-8 sm:pt-10 md:pt-12">
                 <h3 className="text-white font-bold text-sm sm:text-base md:text-lg mb-1 sm:mb-2 line-clamp-1">{movie.title}</h3>

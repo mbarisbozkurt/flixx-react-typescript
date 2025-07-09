@@ -1,7 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import TvShows from './pages/TvShows';
+import MovieDetails from './pages/MovieDetails';
+import ShowDetails from './pages/ShowDetails';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -11,9 +14,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tv-shows" element={<TvShows />} />
-          {/* Add more routes as you create the components */}
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/tv-show/:id" element={<ShowDetails />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

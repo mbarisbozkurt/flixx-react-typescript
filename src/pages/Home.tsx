@@ -1,7 +1,6 @@
 import NowPlaying from '../components/NowPlaying';
 import SearchSection from '../components/SearchSection';
 import PopularMovies from '../components/PopularMovies';
-import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -9,7 +8,6 @@ const Home = () => {
       <NowPlaying />
       <SearchSection />
       <PopularMovies />
-      <Footer />
     </div>
   );
 };
