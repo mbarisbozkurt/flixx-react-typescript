@@ -1,6 +1,6 @@
 import { Movie, MovieDetails, TVShowDetails, TVShow, SearchResponse } from '../types/tmdb';
 
-//*** API INFO starts ***/
+//*** API INFO starts ***//
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 if (!API_KEY) {
@@ -29,7 +29,7 @@ export const TMDB = {
   }
 };
 
-//*** API INFO ends ***/
+//*** API INFO ends ***//
 
 export type MovieResponse = SearchResponse<Movie>;
 export type TVShowResponse = SearchResponse<TVShow>;
@@ -74,4 +74,16 @@ export const fetchMovieDetails = async (id: string): Promise<MovieDetails> => {
 
 export const fetchTVShowDetails = async (id: string): Promise<TVShowDetails> => {
   return fetchFromTMDB(TMDB.endpoints.tvDetails(id));
+};
+
+export const searchContent = async (query: string, type: 'movie' | 'tv'): Promise<SearchResponse<Movie | TVShow>> => {
+  if (!query.trim()) {
+    throw new Error('Search query is required');
+  }
+  return fetchFromTMDB(TMDB.endpoints.search(type), {
+    query: query.trim(),
+    language: 'en-US',
+    page: 1,
+    include_adult: false
+  });
 }; 
