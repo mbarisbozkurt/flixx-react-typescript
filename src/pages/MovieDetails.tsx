@@ -37,7 +37,7 @@ export default function MovieDetails() {
           {/* Back Button */}
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-white border border-yellow-500 rounded px-6 py-2.5 hover:bg-yellow-500 hover:text-black transition-colors duration-300 w-fit mt-4 font-roboto font-medium"
+            className="inline-flex items-center justify-center gap-2 text-white bg-[#020d18] border-2 border-yellow-500 rounded-md px-6 py-2.5 hover:bg-yellow-500 hover:text-black transition-all duration-300 w-fit mt-4 font-roboto font-medium text-base min-w-[160px] shadow-lg"
           >
             <span>←</span> Back to Movies
           </button>
@@ -94,7 +94,7 @@ export default function MovieDetails() {
 
                 <button 
                   onClick={() => movie.homepage ? window.open(movie.homepage, '_blank') : null}
-                  className="border border-yellow-500 text-white px-6 py-2.5 rounded hover:bg-yellow-500 hover:text-black transition-colors duration-300 font-roboto font-medium"
+                  className="inline-flex items-center justify-center text-white bg-[#020d18] border-2 border-yellow-500 rounded-md px-6 py-2.5 hover:bg-yellow-500 hover:text-black transition-all duration-300 font-roboto font-medium text-base min-w-[200px] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={!movie.homepage}
                 >
                   Visit Movie Homepage
